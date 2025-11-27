@@ -92,6 +92,7 @@ Additional reading and reference:
 # TODO
 - language analysis would be good - how much English / French
 - pulling out links or projects from the text
+- track space between speakers. How much of a gap is there between speakers.
 
 ## Links
 - [Are Men Talking Too Much](http://arementalkingtoomuch.com/) on [GitHub](https://github.com/cathydeng/are-men-talking-too-much)
