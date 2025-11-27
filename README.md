@@ -3,6 +3,8 @@
 Static, client-side tool to analyze participation in online meetings using Zoom or Microsoft Teams VTT transcripts.  
 Runs entirely in the browser and can be hosted on GitHub Pages without any backend. [Check out the demo](https://mgifford.github.io/airtime2/).
 
+Meetings are often do not have balanced participation. Often some people dominate meetings, even if they are not aware of this. Unless we are chairing or presenting, we should all be mindful of not speaking too often or too long. This script is an effort to help visualize this. 
+
 ## Features
 
 - Upload, drag-and-drop, or paste a `.vtt` transcript.
@@ -86,6 +88,14 @@ Additional reading and reference:
    - Source: `main` (or your default branch), root directory.
 5. Visit the GitHub Pages URL for the repo.
 6. Upload or paste a VTT transcript and click **Analyze meeting**.
+
+## Links
+- [Are Men Talking Too Much](http://arementalkingtoomuch.com/) on [GitHub](https://github.com/cathydeng/are-men-talking-too-much)
+- [CBE International Article](https://www.cbeinternational.org/resource/are-men-talking-too-much/)
+- [Actually It’s Men Who Can’t Stop Talking](https://www.huffpost.com/entry/actually-its-men-who-cant-stop-talking_n_5941505be4b0d3185486714d)
+- [Why men talk over women in meetings, and what to do about it](https://www.stylist.co.uk/life/careers/men-interrupting-women-work-meetings/457339)
+- [Gender disparities in colloquium speakers at top universities](https://www.pnas.org/doi/abs/10.1073/pnas.1708414115)
+
 
 ## Notes
 
