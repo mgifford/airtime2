@@ -92,3 +92,6 @@ Additional reading and reference:
 - All processing happens client-side in the browser.
 - No transcripts are sent to a server by this code.
 - AI/NLP-enhanced analysis (e.g. summaries, sentiment, per-speaker reading level) is intentionally left as a future enhancement to keep this version free and lightweight.
+
+## AI Disclosure
+ChatGPT 5.1 was used to develop this code.
