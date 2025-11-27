@@ -1,12 +1,12 @@
 # Meeting Airtime & Participation Analyzer
 
 Static, client-side tool to analyze participation in online meetings using Zoom or Microsoft Teams VTT transcripts.  
-Runs entirely in the browser and can be hosted on GitHub Pages without any backend.
+Runs entirely in the browser and can be hosted on GitHub Pages without any backend. [Check out the demo](https://mgifford.github.io/airtime2/).
 
 ## Features
 
 - Upload, drag-and-drop, or paste a `.vtt` transcript.
-- Parse speaker turns and merge consecutive utterances from the same speaker.
+- Parse speaker turns and merge consecutive messages from the same speaker.
 - Compute per-speaker metrics:
   - Word count
   - Speaking time (minutes)
@@ -45,7 +45,7 @@ This tool is built with WCAG 2.2 AA in mind:
   - Timeline and word charts use descriptive `aria-label`s.
 - Visual emphasis for active/muted speakers uses borders, background, and font-style rather than low-contrast text.
 
-Always validate with your own tooling (e.g. Accessibility Insights, axe, WAVE) against your target theme and deployment context.
+If you discover issues, please consider [creating an issue](https://github.com/mgifford/airtime2/issues) or a submitting a Pull Request 
 
 ## Credits & inspiration
 
