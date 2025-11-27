@@ -89,13 +89,16 @@ Additional reading and reference:
 5. Visit the GitHub Pages URL for the repo.
 6. Upload or paste a VTT transcript and click **Analyze meeting**.
 
+# TODO
+- language analysis would be good - how much English / French
+- pulling out links or projects from the text
+
 ## Links
 - [Are Men Talking Too Much](http://arementalkingtoomuch.com/) on [GitHub](https://github.com/cathydeng/are-men-talking-too-much)
 - [CBE International Article](https://www.cbeinternational.org/resource/are-men-talking-too-much/)
 - [Actually It’s Men Who Can’t Stop Talking](https://www.huffpost.com/entry/actually-its-men-who-cant-stop-talking_n_5941505be4b0d3185486714d)
 - [Why men talk over women in meetings, and what to do about it](https://www.stylist.co.uk/life/careers/men-interrupting-women-work-meetings/457339)
 - [Gender disparities in colloquium speakers at top universities](https://www.pnas.org/doi/abs/10.1073/pnas.1708414115)
-
 
 ## Notes
 
