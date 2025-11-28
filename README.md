@@ -1,9 +1,9 @@
-# Meeting Airtime & Participation Analyzer
+# Meeting Airtime Analyzer
 
-Static, client-side tool to analyze participation in online meetings using Zoom or Microsoft Teams VTT transcripts.  
+Static, client-side tool to analyze the time people spend talking in online meetings using Zoom or Microsoft Teams VTT transcripts.  
 Runs entirely in the browser and can be hosted on GitHub Pages without any backend. [Check out the demo](https://mgifford.github.io/airtime2/).
 
-Meetings are often do not have balanced participation. Often some people dominate meetings, even if they are not aware of this. Unless we are chairing or presenting, we should all be mindful of not speaking too often or too long. This script is an effort to help visualize this. 
+Meetings are often do not have balanced participation. Often some people dominate the conversations, even if they are not aware of this. Unless we are chairing or presenting, we should all be mindful of not speaking too often or too long. This script is an effort to help visualize this. 
 
 ## Features
 
