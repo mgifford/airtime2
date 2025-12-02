@@ -115,22 +115,27 @@ function parseVtt(raw) {
 }
 
 function parseTranscript(raw) {
-  // Heuristic: if it contains a VTT timestamp arrow, treat as VTT.
-  if (TIMESTAMP_RE.test(raw)) return parseVtt(raw);
+  // 1) VTT path
+  if (TIMESTAMP_RE.test(raw)) {
+    const vtt = parseVtt(raw);
+    if (vtt.length) return vtt;
+  }
 
-  // Otherwise, try TXT
-  if (TXT_HEADER_RE.test(raw)) return parseTxt(raw);
+  // 2) TXT path (parse, don’t “detect”)
+  const txt = parseTxt(raw);
+  if (txt.length) return txt;
 
-  // Last try: attempt VTT anyway (covers weird whitespace cases)
-  const vtt = parseVtt(raw);
-  if (vtt.length) return vtt;
+  // 3) Last resort: try VTT anyway
+  const vtt2 = parseVtt(raw);
+  if (vtt2.length) return vtt2;
 
   return [];
 }
 
 // TXT format header: [Speaker Name] 12:14:49
 // const TXT_HEADER_RE = /^\s*\[(.+?)\]\s+(\d{2}):(\d{2}):(\d{2})\s*$/;
-const TXT_HEADER_RE = /^\s*\[(.+?)\]\s+(\d{2}):(\d{2}):(\d{2})\s*$/u;
+// const TXT_HEADER_RE = /^\s*\[(.+?)\]\s+(\d{2}):(\d{2}):(\d{2})\s*$/u;
+const TXT_HEADER_RE = /^\s*\[(.+?)\]\s+(\d{2}):(\d{2}):(\d{2})\s*$/um;
 
 function timeHmsToSeconds(hh, mm, ss) {
   return Number(hh) * 3600 + Number(mm) * 60 + Number(ss);
@@ -150,7 +155,8 @@ function normalizeRaw(raw) {
 
 function parseTxt(raw) {
   raw = normalizeRaw(raw);
-  const lines = raw.split(/\r?\n/);
+  // const lines = raw.split(/\r?\n/);
+  const lines = raw.split("\n");
   const blocks = [];
   let lastStart = -Infinity;
 
