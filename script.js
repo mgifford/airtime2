@@ -114,6 +114,80 @@ function parseVtt(raw) {
   return utterances;
 }
 
+function parseTranscript(raw) {
+  // Heuristic: if it contains a VTT timestamp arrow, treat as VTT.
+  if (TIMESTAMP_RE.test(raw)) return parseVtt(raw);
+
+  // Otherwise, try TXT
+  if (TXT_HEADER_RE.test(raw)) return parseTxt(raw);
+
+  // Last try: attempt VTT anyway (covers weird whitespace cases)
+  const vtt = parseVtt(raw);
+  if (vtt.length) return vtt;
+
+  return [];
+}
+
+// TXT format header: [Speaker Name] 12:14:49
+const TXT_HEADER_RE = /^\s*\[(.+?)\]\s+(\d{2}):(\d{2}):(\d{2})\s*$/;
+
+function timeHmsToSeconds(hh, mm, ss) {
+  return Number(hh) * 3600 + Number(mm) * 60 + Number(ss);
+}
+
+// If the clock goes backwards (cross midnight), carry into next day.
+function monotonicize(seconds, lastSeconds) {
+  let t = seconds;
+  while (t < lastSeconds) t += 24 * 3600;
+  return t;
+}
+
+function parseTxt(raw) {
+  const lines = raw.split(/\r?\n/);
+  const blocks = [];
+  let lastStart = -Infinity;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trimEnd();
+    const m = TXT_HEADER_RE.exec(line);
+    if (!m) continue;
+
+    const speaker = m[1].trim();
+    const startRaw = timeHmsToSeconds(m[2], m[3], m[4]);
+    const start = monotonicize(startRaw, lastStart);
+    lastStart = start;
+
+    // Collect text until blank line or next header
+    const textLines = [];
+    let j = i + 1;
+    while (j < lines.length) {
+      const nextLine = lines[j];
+      if (nextLine.trim() === "") break;
+      // Stop early if we hit another header line (some exports omit blank lines)
+      if (TXT_HEADER_RE.test(nextLine.trim())) break;
+      textLines.push(nextLine.trimEnd());
+      j++;
+    }
+
+    const text = textLines.join(" ").trim();
+    if (text) blocks.push({ speaker, start, text });
+
+    i = j - 1;
+  }
+
+  // Infer end times from next block start; last one gets a default tail.
+  // This is unavoidable because TXT provides no end times.
+  const DEFAULT_LAST_CUE_SECONDS = 2;
+
+  const utterances = blocks.map((b, idx) => {
+    const next = blocks[idx + 1];
+    const end = next ? next.start : b.start + DEFAULT_LAST_CUE_SECONDS;
+    return { speaker: b.speaker, start: b.start, end, text: b.text };
+  });
+
+  return utterances;
+}
+
 function mergeUtterances(utterances) {
   if (!utterances.length) return [];
   const merged = [];
@@ -795,18 +869,21 @@ function setupFileHandling() {
 document.getElementById("analyze").addEventListener("click", () => {
   const raw = document.getElementById("transcript").value;
   if (!raw.trim()) {
-    alert("Please upload or paste a VTT transcript before analyzing.");
+    // alert("Please upload or paste a VTT transcript before analyzing.");
+    alert("Please upload or paste a transcript (VTT or TXT) before analyzing.");
     setAnalysisVisible(false);
     return;
   }
 
   resetSpeakerVisuals();
 
-  const utterances = parseVtt(raw);
+  // const utterances = parseVtt(raw);
+  const utterances = parseTranscript(raw);
   const merged = mergeUtterances(utterances);
 
   if (!merged.length) {
-    alert("No valid VTT caption blocks were found. Please check the transcript format.");
+    // alert("No valid VTT caption blocks were found. Please check the transcript format.");
+    alert("No valid transcript blocks were found. Supported formats: VTT, or TXT blocks like: [Speaker] 12:34:56");
     setAnalysisVisible(false);
     return;
   }
