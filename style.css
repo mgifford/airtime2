@@ -551,3 +551,7 @@
   border: 2px solid color-mix(in srgb, currentColor 40%, transparent);
   display: block;
 }
+
+.social-media-links {
+    text-align: center;
+}
