@@ -495,12 +495,16 @@
       outline-offset: 2px;
     }
 
+
+
 /* Bluesky Links */
 /* Container card */
 .post__likes {
   margin-block: 2rem;
   padding: 1.25rem 1.5rem;
   border-radius: 0.75rem;
+  text-align: center;
+  margin-inline: auto;
 
   /* KEY CHANGES: no hard-coded colors */
   color: inherit; /* use whatever the page is using (light or dark) */
@@ -525,16 +529,19 @@
   text-decoration: underline;
   text-underline-offset: 0.18em;
   color: inherit; /* let the global link color / theme handle it */
+  display: inline-block;
+  margin-inline: auto;
 }
 
 /* Avatar list */
 .post__likesList {
   list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 0;
   padding: 0;
+  margin: 1rem auto 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: .5rem;
 }
 
 .post__like {
