@@ -129,7 +129,8 @@ function parseTranscript(raw) {
 }
 
 // TXT format header: [Speaker Name] 12:14:49
-const TXT_HEADER_RE = /^\s*\[(.+?)\]\s+(\d{2}):(\d{2}):(\d{2})\s*$/;
+// const TXT_HEADER_RE = /^\s*\[(.+?)\]\s+(\d{2}):(\d{2}):(\d{2})\s*$/;
+const TXT_HEADER_RE = /^\s*\[(.+?)\]\s+(\d{2}):(\d{2}):(\d{2})\s*$/u;
 
 function timeHmsToSeconds(hh, mm, ss) {
   return Number(hh) * 3600 + Number(mm) * 60 + Number(ss);
@@ -142,7 +143,13 @@ function monotonicize(seconds, lastSeconds) {
   return t;
 }
 
+function normalizeRaw(raw) {
+  // Remove UTF-8 BOM if present and normalize newlines
+  return raw.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+}
+
 function parseTxt(raw) {
+  raw = normalizeRaw(raw);
   const lines = raw.split(/\r?\n/);
   const blocks = [];
   let lastStart = -Infinity;
@@ -185,6 +192,11 @@ function parseTxt(raw) {
     return { speaker: b.speaker, start: b.start, end, text: b.text };
   });
 
+console.log("[airtime2] TXT blocks:", blocks.length, "utterances:", utterances.length);
+if (!blocks.length) {
+  console.log("[airtime2] First 5 lines:", lines.slice(0, 5));
+}
+  
   return utterances;
 }
 
