@@ -145,7 +145,7 @@ Caching/versioning:
 Test pages via a local HTTP server (not `file://`) to match GitHub Pages behavior.
 
 Examples:
-- `python3 -m http.server 8000`
+- `python3 -m http.server 8009`
 - `npx serve`
 
 Verify:
