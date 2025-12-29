@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" aria-labelledby="title desc" viewBox="0 0 900 520">
+  <title id="title">Airtime2: who spoke when and how much (from VTT transcripts)</title>
+  <desc id="desc">Icon-style illustration showing a VTT transcript file flowing into speaker turn analysis: a speaking-order timeline with colored segments and a per-speaker volume chart.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#111827"/>
+      <stop offset="1" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="softShadow" width="140%" height="140%" x="-20%" y="-20%">
+      <feDropShadow dx="0" dy="10" flood-color="#000" flood-opacity=".35" stdDeviation="12"/>
+    </filter>
+    <style>
+      .small { font: 500 14px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; fill: #cbd5e1; }
+      .tiny { font: 500 12px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; fill: #94a3b8; }
+      .card, .stroke { stroke: #334155; stroke-width: 2; }
+      .card { fill: url(#panel); stroke: #1f2937; }
+      .accent1 { fill: #60a5fa; }
+      .accent2 { fill: #34d399; }
+      .accent3 { fill: #fbbf24; }
+      .accent4 { fill: #f472b6; }
+      .muted { fill: #0b1220; }
+      .arrow { fill: none; stroke: #94a3b8; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+  <rect width="900" height="520" fill="url(#bg)" rx="28"/>
+  <text dominant-baseline="hanging" style="font:600 18px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;fill:#e5e7eb" transform="translate(42 40)">Airtime2</text>
+  <text y="30" class="small" dominant-baseline="hanging" transform="translate(42 40)">Speaker turns / speaking order / volume / timeline (from .vtt)</text>
+  <g filter="url(#softShadow)" transform="translate(42 110)">
+    <rect width="260" height="330" class="card" rx="18"/>
+    <path fill="#0b1220" stroke="#334155" stroke-width="2" d="M54 40h116l34 34v190c0 10-8 18-18 18H54c-10 0-18-8-18-18V58c0-10 8-18 18-18z"/>
+    <path fill="none" stroke="#334155" stroke-width="2" d="M170 40v40h40"/>
+    <text x="28" y="78" style="font:600 12px/1.2 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace;fill:#cbd5e1" transform="translate(26 26)">WEBVTT</text>
+    <g transform="translate(48 124)">
+      <rect width="166" height="10" fill="#0f172a" class="stroke" rx="5"/>
+      <rect width="146" height="10" y="18" fill="#0f172a" class="stroke" rx="5"/>
+      <rect width="156" height="10" y="36" fill="#0f172a" class="stroke" rx="5"/>
+      <text y="72" class="tiny">00:01.200 -> 00:03.400</text>
+      <text y="92" class="tiny">ALICE: ...</text>
+      <text y="122" class="tiny">00:03.600 -> 00:06.100</text>
+      <text y="142" class="tiny">BOB: ...</text>
+    </g>
+    <text x="24" y="285" class="small">Input</text>
+    <text x="24" y="310" class="tiny">Drop a VTT transcript, extract speaker turns</text>
+  </g>
+  <path d="M320 260c40 0 60-40 100-40s60 40 100 40M520 260l-18-10m18 10-18 10" class="arrow"/>
+  <g filter="url(#softShadow)" transform="translate(520 110)">
+    <rect width="338" height="330" class="card" rx="18"/>
+    <text x="22" y="34" class="small">Who spoke, when, and how much</text>
+    <g transform="translate(22 55)">
+      <rect width="74" height="26" stroke="#1f2937" stroke-width="2" class="muted" rx="13"/>
+      <circle cx="14" cy="13" r="6" class="accent1"/>
+      <text x="26" y="17" class="tiny">Alice</text>
+    </g>
+    <g transform="translate(104 55)">
+      <rect width="64" height="26" stroke="#1f2937" stroke-width="2" class="muted" rx="13"/>
+      <circle cx="14" cy="13" r="6" class="accent2"/>
+      <text x="26" y="17" class="tiny">Bob</text>
+    </g>
+    <g transform="translate(176 55)">
+      <rect width="76" height="26" stroke="#1f2937" stroke-width="2" class="muted" rx="13"/>
+      <circle cx="14" cy="13" r="6" class="accent3"/>
+      <text x="26" y="17" class="tiny">Chen</text>
+    </g>
+    <g transform="translate(260 55)">
+      <rect width="78" height="26" stroke="#1f2937" stroke-width="2" class="muted" rx="13"/>
+      <circle cx="14" cy="13" r="6" class="accent4"/>
+      <text x="26" y="17" class="tiny">Dina</text>
+    </g>
+    <g transform="translate(22 105)">
+      <text y="-10" class="tiny">Speaking order (timeline)</text>
+      <rect width="294" height="46" fill="#0b1220" stroke="#334155" stroke-width="2" rx="10"/>
+      <rect width="70" height="26" x="8" y="10" class="accent1" opacity=".95" rx="8"/>
+      <rect width="38" height="26" x="84" y="10" class="accent2" opacity=".95" rx="8"/>
+      <rect width="56" height="26" x="128" y="10" class="accent1" opacity=".95" rx="8"/>
+      <rect width="32" height="26" x="190" y="10" class="accent3" opacity=".95" rx="8"/>
+      <rect width="58" height="26" x="228" y="10" class="accent4" opacity=".95" rx="8"/>
+      <g stroke="#334155" stroke-width="2" opacity=".9">
+        <path d="M8 46v12"/>
+        <path d="M76 46v12"/>
+        <path d="M144 46v12"/>
+        <path d="M212 46v12"/>
+        <path d="M286 46v12"/>
+      </g>
+      <g fill="#94a3b8" class="tiny">
+        <text x="2" y="78">0m</text>
+        <text x="66" y="78">5m</text>
+        <text x="132" y="78">10m</text>
+        <text x="198" y="78">15m</text>
+        <text x="272" y="78">20m</text>
+      </g>
+    </g>
+    <g transform="translate(22 220)">
+      <text y="-10" class="tiny">Speaking volume (relative)</text>
+      <rect width="294" height="86" fill="#0b1220" stroke="#334155" stroke-width="2" rx="12"/>
+      <path stroke="#475569" stroke-width="2" d="M16 16v54M16 70h264"/>
+      <rect width="44" height="40" x="28" y="30" class="accent1" rx="6"/>
+      <rect width="44" height="24" x="82" y="46" class="accent2" rx="6"/>
+      <rect width="44" height="30" x="136" y="40" class="accent3" rx="6"/>
+      <rect width="44" height="48" x="190" y="22" class="accent4" rx="6"/>
+      <g class="tiny">
+        <text x="36" y="82">A</text>
+        <text x="90" y="82">B</text>
+        <text x="144" y="82">C</text>
+        <text x="198" y="82">D</text>
+      </g>
+    </g>
+  </g>
+  <text class="tiny" transform="translate(42 472)">Client-side analysis of Zoom/Teams VTT transcripts</text>
+</svg>

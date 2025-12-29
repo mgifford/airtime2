@@ -45,6 +45,27 @@
       margin: 0 auto;
     }
 
+    .header-flex {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: nowrap;
+    }
+
+    .app-logo {
+      width: 96px;
+      height: auto;
+      flex-shrink: 0;
+      border-radius: 24px;
+      background: #0b1220;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    .app-intro {
+      flex: 1;
+      min-width: 0;
+    }
+
     header {
       margin-bottom: 1rem;
     }
@@ -493,6 +514,21 @@
     .site-footer a:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 2px;
+    }
+
+    .instructions-visual {
+      margin: 2rem 0 0;
+      padding: 1rem 0 0.5rem;
+      text-align: center;
+    }
+
+    .instructions-visual img {
+      width: 100%;
+      height: auto;
+      border-radius: 18px;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.15);
+      border: 1px solid var(--border-subtle);
+      background: #0b1220;
     }
 
 

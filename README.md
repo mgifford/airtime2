@@ -1,9 +1,33 @@
-# Meeting Airtime Analyzer
+# Airtime2: Meeting Talk-Time Analyzer
+
+**Privacy-focused meeting participation analyzer for Zoom and Microsoft Teams transcripts.**
 
 Static, client-side tool to analyze the time people spend talking in online meetings using Zoom or Microsoft Teams VTT transcripts.  
 Runs entirely in the browser and can be hosted on GitHub Pages without any backend. [Check out the demo](https://mgifford.github.io/airtime2/).
 
-Meetings are often do not have balanced participation. Often some people dominate the conversations, even if they are not aware of this. Unless we are chairing or presenting, we should all be mindful of not speaking too often or too long. This script is an effort to help visualize this. 
+Meetings often do not have balanced participation. Some people may dominate conversations without awareness. Unless chairing or presenting, we should all be mindful of not speaking too often or too long. This tool helps visualize participation patterns to encourage more equitable discussions.
+
+## Why Airtime2?
+
+- **Privacy-first**: No data leaves your browser - everything runs client-side
+- **No backend required**: Pure HTML, CSS, and JavaScript
+- **Accessible**: Built with WCAG 2.2 AA guidelines in mind
+- **Free and open source**: Host it yourself on GitHub Pages
+- **Rich insights**: Word counts, speaking time, word clouds, and timeline visualization 
+
+## Visual assets for sharing
+
+These SVGs live in `assets/` so they are served directly from GitHub Pages. Use them in LinkedIn posts, newsletters, or slide decks without needing raster exports.
+
+![Airtime2 instructions illustration showing VTT input flowing into speaker timeline](assets/airtime2-instructions.svg)
+
+![Airtime2 logo showing VTT icon, bars, and chat bubble](assets/airtime2-logo.svg)
+
+Tips for social media:
+
+- Add one of the SVGs as the first image in a LinkedIn post to guarantee a branded preview.
+- Mention that Airtime2 runs fully client-side and never uploads transcripts to emphasize privacy.
+- Pair the visuals with a short call-to-action such as “Drop a VTT transcript and see who dominated the conversation.”
 
 ## Features
 

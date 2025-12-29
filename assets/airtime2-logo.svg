@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" aria-labelledby="title desc" viewBox="0 0 512 512">
+  <title id="title">Airtime2 logo</title>
+  <desc id="desc">Rounded dark square showing a VTT file icon, waveform bars, and abstract speech bubble to represent meeting airtime analysis.</desc>
+  <rect width="448" height="448" x="32" y="32" fill="#0b1220" rx="112"/>
+  <path fill="#111827" stroke="#334155" stroke-width="14" d="M164 132h150l54 54v188c0 26-21 46-46 46H164c-26 0-46-20-46-46V178c0-26 20-46 46-46z"/>
+  <path fill="none" stroke="#334155" stroke-linejoin="round" stroke-width="14" d="M314 132v70h70"/>
+  <rect width="112" height="46" x="148" y="172" fill="#0f172a" stroke="#334155" stroke-width="10" rx="18"/>
+  <path fill="none" stroke="#60a5fa" stroke-linecap="round" stroke-linejoin="round" stroke-width="10" d="m168 201 14-22 14 22 14-22 14 22"/>
+  <text x="274" y="206" fill="#cbd5e1" font-family="ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace" font-size="26" font-weight="800">VTT</text>
+  <path stroke="#34d399" stroke-linecap="round" stroke-width="16" d="M170 308v32m36-48v64m36-78v92m36-76v60m36-48v36"/>
+  <circle cx="170" cy="388" r="14" fill="#60a5fa"/>
+  <circle cx="242" cy="388" r="14" fill="#fbbf24"/>
+  <circle cx="314" cy="388" r="14" fill="#f472b6"/>
+  <path stroke="#475569" stroke-linecap="round" stroke-width="12" d="M190 388h32m28 0h32"/>
+  <path fill="#0f172a" stroke="#334155" stroke-width="12" d="M358 268c0-20 16-36 36-36h22c20 0 36 16 36 36v18c0 20-16 36-36 36h-10l-18 16v-16h-30c-20 0-36-16-36-36v-18z"/>
+  <path stroke="#94a3b8" stroke-linecap="round" stroke-width="10" d="M386 276h56m-56 24h38"/>
+</svg>

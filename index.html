@@ -4,16 +4,46 @@
   <meta charset="utf-8">
   <title>Airtime2: Meeting Talk-Time Analyzer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Analyze who spoke, for how long, and what they talked about using Zoom or Teams VTT transcripts. A privacy-focused, client-side tool that runs entirely in your browser.">
+  
+  <!-- Open Graph / Facebook / LinkedIn -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mgifford.github.io/airtime2/">
+  <meta property="og:title" content="Airtime2: Meeting Talk-Time Analyzer">
+  <meta property="og:description" content="Analyze who spoke, for how long, and what they talked about using Zoom or Teams VTT transcripts. Privacy-focused and runs entirely in your browser.">
+  <meta property="og:site_name" content="Airtime2">
+  <meta property="og:image" content="https://mgifford.github.io/airtime2/assets/airtime2-instructions.svg">
+  <meta property="og:image:type" content="image/svg+xml">
+  <meta property="og:image:alt" content="Illustration of Airtime2 showing VTT input flowing into speaker timeline and charts.">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://mgifford.github.io/airtime2/">
+  <meta name="twitter:title" content="Airtime2: Meeting Talk-Time Analyzer">
+  <meta name="twitter:description" content="Analyze who spoke, for how long, and what they talked about using Zoom or Teams VTT transcripts. Privacy-focused and runs entirely in your browser.">
+  <meta name="twitter:image" content="https://mgifford.github.io/airtime2/assets/airtime2-instructions.svg">
+  <meta name="twitter:image:alt" content="Illustration of Airtime2 showing VTT input flowing into speaker timeline and charts.">
+  
   <link rel="stylesheet" href="style.css">
   <style></style>
 </head>
 <body>
   <header>
-    <div class="container">
-      <h1>Airtime2: Meeting Talk-Time Analyzer</h1>
-      <p id="app-description">
-        Analyze who spoke, for how long, and what they talked about using Zoom or Teams VTT transcripts. No AI, no analytics, just a simple report with a clean transcript of the discussion. 
-      </p>
+    <div class="container header-flex">
+      <img
+        src="assets/airtime2-logo.svg"
+        alt="Airtime2 logo"
+        class="app-logo"
+        width="96"
+        height="96"
+        decoding="async"
+      >
+      <div class="app-intro">
+        <h1>Airtime2: Meeting Talk-Time Analyzer</h1>
+        <p id="app-description">
+          Analyze who spoke, for how long, and what they talked about using Zoom or Teams VTT transcripts. No AI, no analytics, just a simple report with a clean transcript of the discussion. 
+        </p>
+      </div>
     </div>
   </header>
 
@@ -161,6 +191,18 @@
     </section>
 
   </main>
+
+  <section id="instructions-visual" class="instructions-visual" aria-labelledby="instructions-heading">
+    <div class="container">
+      <h2 id="instructions-heading" class="sr-only">How Airtime2 works</h2>
+      <img
+        src="assets/airtime2-instructions.svg"
+        alt="Illustration showing how Airtime2 turns VTT transcripts into speaker timelines, charts, and word clouds"
+        loading="lazy"
+        decoding="async"
+      >
+    </div>
+  </section>
 
   <footer class="site-footer">
     <div class="container">

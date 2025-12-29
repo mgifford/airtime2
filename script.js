@@ -23,6 +23,16 @@ let currentSortDir = "desc";
 // Meeting date extracted from filename (if available)
 let meetingDateDisplay = null;
 
+function setInstructionsVisible(show) {
+  const section = document.getElementById("instructions-visual");
+  if (!section) return;
+  if (show) {
+    section.classList.remove("is-hidden");
+  } else {
+    section.classList.add("is-hidden");
+  }
+}
+
 function setAnalysisVisible(visible) {
   ANALYSIS_SECTION_IDS.forEach(id => {
     const el = document.getElementById(id);
@@ -33,6 +43,7 @@ function setAnalysisVisible(visible) {
       el.classList.add("is-hidden");
     }
   });
+  setInstructionsVisible(!visible);
 }
 
 // initial state: hide sections 2–5
