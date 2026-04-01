@@ -131,6 +131,9 @@ Additional reading and reference:
 - No transcripts are sent to a server by this code.
 - AI/NLP-enhanced analysis (e.g. summaries, sentiment, per-speaker reading level) is intentionally left as a future enhancement to keep this version free and lightweight.
 
+## Related projects
+
+Check out [EchoLocate](https://github.com/mgifford/EchoLocate) an open source speech to text tool (with translation built-in).
 
 ## AI Disclosure
 
