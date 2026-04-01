@@ -7,12 +7,13 @@ let colorIndex = 0;
 let activeSpeaker = null;
 let stickySpeaker = null;
 
-// Sections 2–5 to show/hide
+// Sections 2–6 to show/hide
 const ANALYSIS_SECTION_IDS = [
   "summary-section",
   "timeline-section",
   "wordcloud-section",
-  "transcript-section"
+  "transcript-section",
+  "prompt-section"
 ];
 
 // Global stats for sorting
@@ -854,6 +855,173 @@ function parseFilenameForDate(name) {
   return `${day}/${month}/${year} ${hh}:${mm}`;
 }
 
+// Prompt generator
+
+const PROMPT_TEMPLATES = {
+  summary: {
+    label: "Meeting summary",
+    text: `# Role
+Act as a professional Executive Assistant and Expert Scribe. Your goal is to synthesize the following meeting transcript into a highly organized, concise summary.
+
+# Context
+The transcript may contain anonymous speakers (e.g., "Speaker 1", "Speaker A"). Even if names are not provided, maintain the distinction between these individuals to capture the "threaded" nature of the debate or discussion.
+
+# Tasks
+1. **Executive Summary**: A 2-3 sentence overview of the meeting's purpose and primary outcome.
+2. **Threaded Discussion Points**: Organize the core of the meeting by "Topic Threads." For each thread:
+   - Identify the main topic.
+   - Summarize the back-and-forth, highlighting differing perspectives from specific speakers (e.g., "Speaker 1 proposed X, while Speaker 2 raised concerns about Y").
+3. **Action Items**: Extract all tasks, deadlines, and owners mentioned. Use a checklist format. If an owner is not specified, label it "Unassigned."
+4. **Decisions Made**: List any final conclusions or "dead ends" reached during the session.
+
+# Constraints
+- Be concise. Use bullet points.
+- Remove filler words ("um," "uh," "like") and repetitive conversational loops.
+- Use bolding for key terms and speaker identifiers.
+
+# Transcript
+`
+  },
+  actions: {
+    label: "Commitments & action items",
+    text: `# Role
+Act as a meticulous project manager reviewing a meeting transcript.
+
+# Task
+Extract every commitment, task, and action item mentioned in the transcript below.
+
+For each item, provide:
+- **What**: A clear, one-line description of the action.
+- **Who**: The person responsible. If not specified, label as "Unassigned."
+- **When**: Any deadline or timeframe mentioned. If not specified, label as "No deadline given."
+- **Context**: One sentence explaining why this action was agreed upon.
+
+Present the results as a numbered checklist, ordered by speaker.
+
+# Constraints
+- Include only concrete commitments, not vague intentions.
+- Do not invent or infer owners or deadlines that are not clearly stated.
+- Note any ambiguous items separately under "Unclear commitments."
+
+# Transcript
+`
+  },
+  perspectives: {
+    label: "Multiple perspectives",
+    text: `# Role
+Act as a neutral facilitator reviewing a meeting transcript.
+
+# Task
+Analyze the transcript and present the conversation from multiple perspectives:
+
+1. **By speaker**: For each participant, summarize their main positions, concerns, and contributions.
+2. **Points of agreement**: Identify topics where speakers converged or reached consensus.
+3. **Points of tension**: Identify topics where speakers held different or opposing views. Quote briefly where helpful.
+4. **Underrepresented voices**: Note any speakers who contributed less and whether any important perspectives may have been missed.
+
+# Constraints
+- Be neutral and fair to all speakers.
+- Use direct quotes sparingly and only to illustrate key moments.
+- Avoid interpreting tone or intent beyond what is stated.
+
+# Transcript
+`
+  },
+  nextmeeting: {
+    label: "Next meeting prep",
+    text: `# Role
+Act as an experienced meeting facilitator preparing for the next meeting in this series.
+
+# Task
+Based on the transcript below, produce a preparation brief for the next meeting:
+
+1. **Unresolved issues**: List topics that were raised but not concluded.
+2. **Follow-up items**: List action items or commitments that should be checked on.
+3. **Suggested agenda items**: Propose a short agenda for the next meeting based on what was left open.
+4. **Questions to prepare**: List 3-5 questions that participants should think about before the next meeting.
+5. **Risks or blockers**: Flag anything that could delay progress if not addressed.
+
+# Constraints
+- Focus on forward-looking items only.
+- Be concise. Use bullet points and numbered lists.
+- Do not re-summarize resolved topics.
+
+# Transcript
+`
+  },
+  tips: {
+    label: "Participation tips",
+    text: `# Role
+Act as an expert in inclusive meeting facilitation and organizational communication.
+
+# Task
+Review the transcript and provide constructive, actionable feedback to help improve participation in future meetings.
+
+1. **Participation balance**: Assess whether speaking time was distributed equitably. Note any dominant or quiet participants.
+2. **Facilitation observations**: Comment on how well the discussion was guided, including whether all voices had space to contribute.
+3. **Communication patterns**: Identify any patterns that helped or hindered understanding (e.g., interruptions, jargon, unclear questions).
+4. **Specific tips**: Offer 3-5 practical suggestions the group could try in the next meeting to improve engagement and inclusion.
+
+# Constraints
+- Be constructive and non-judgmental. Focus on behaviors, not individuals.
+- Keep suggestions practical and easy to implement.
+- Acknowledge what is already working well before suggesting improvements.
+
+# Transcript
+`
+  }
+};
+
+function formatTranscriptForPrompt(mergedUtterances) {
+  return mergedUtterances.map(u => `${u.speaker}: ${u.text}`).join("\n\n");
+}
+
+function buildPrompt(templateKey, mergedUtterances) {
+  const template = PROMPT_TEMPLATES[templateKey];
+  if (!template) return "";
+  return template.text + formatTranscriptForPrompt(mergedUtterances);
+}
+
+function renderPromptSection(mergedUtterances) {
+  const outputEl = document.getElementById("prompt-output");
+  const copyBtn = document.getElementById("copy-prompt-btn");
+  const statusEl = document.getElementById("prompt-copy-status");
+
+  function updatePromptOutput() {
+    const selected = document.querySelector('input[name="prompt-type"]:checked');
+    const key = selected ? selected.value : "summary";
+    outputEl.value = buildPrompt(key, mergedUtterances);
+    statusEl.textContent = "";
+  }
+
+  // Set initial value
+  updatePromptOutput();
+
+  // Re-wire radio buttons using onchange to avoid stacking listeners across re-analyses
+  const radios = document.querySelectorAll('input[name="prompt-type"]');
+  radios.forEach(radio => {
+    radio.onchange = updatePromptOutput;
+  });
+
+  // Copy button
+  copyBtn.onclick = () => {
+    const text = outputEl.value;
+    if (!text) return;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => {
+        statusEl.textContent = "Copied!";
+        setTimeout(() => { statusEl.textContent = ""; }, 2500);
+      }).catch(() => {
+        statusEl.textContent = "Press Ctrl+C / Cmd+C to copy.";
+        outputEl.select();
+      });
+    } else {
+      statusEl.textContent = "Press Ctrl+C / Cmd+C to copy.";
+      outputEl.select();
+    }
+  };
+}
+
 // File handling
 
 function setupFileHandling() {
@@ -933,6 +1101,7 @@ document.getElementById("analyze").addEventListener("click", () => {
   renderTimeline(merged, meetingDuration);
   renderBarCharts(speakerStatsGlobal);
   renderWordClouds(merged, speakerStatsGlobal);
+  renderPromptSection(merged);
 });
 
 // Init

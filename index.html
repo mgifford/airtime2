@@ -190,6 +190,55 @@
       <div id="cleaned" aria-label="Cleaned transcript"></div>
     </section>
 
+    <section id="prompt-section" class="app-section is-hidden" aria-labelledby="prompt-heading">
+      <h2 id="prompt-heading">6. AI prompt generator</h2>
+      <p>
+        Copy a ready-made prompt to use with your preferred AI assistant (such as ChatGPT, Claude, or Gemini).
+        The prompt includes the cleaned transcript. Your transcript never leaves your browser.
+      </p>
+
+      <fieldset class="prompt-selector" id="prompt-selector">
+        <legend>Choose a prompt type</legend>
+        <div class="prompt-options">
+          <label class="prompt-option">
+            <input type="radio" name="prompt-type" value="summary" checked>
+            Meeting summary
+          </label>
+          <label class="prompt-option">
+            <input type="radio" name="prompt-type" value="actions">
+            Commitments &amp; action items
+          </label>
+          <label class="prompt-option">
+            <input type="radio" name="prompt-type" value="perspectives">
+            Multiple perspectives
+          </label>
+          <label class="prompt-option">
+            <input type="radio" name="prompt-type" value="nextmeeting">
+            Next meeting prep
+          </label>
+          <label class="prompt-option">
+            <input type="radio" name="prompt-type" value="tips">
+            Participation tips
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="prompt-output-row">
+        <textarea
+          id="prompt-output"
+          class="prompt-output"
+          readonly
+          aria-label="Generated AI prompt"
+        ></textarea>
+        <div class="prompt-actions">
+          <button type="button" id="copy-prompt-btn">
+            Copy prompt
+          </button>
+          <div id="prompt-copy-status" class="prompt-copy-status" role="status" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <section id="instructions-visual" class="instructions-visual" aria-labelledby="instructions-heading">
