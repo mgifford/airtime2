@@ -489,6 +489,23 @@ Hello.
     const result = parseTxt(txt);
     expect(result[0].speaker).toBe("Jane Doe");
   });
+
+  test("adjacent headers without blank line between them are split correctly", () => {
+    // Some transcript exports omit the blank line between blocks.
+    // The TXT_HEADER_RE early-stop branch breaks text collection when the next line
+    // is itself a header.
+    const txt = `[Alice] 00:00:01
+Hello there.
+[Bob] 00:00:10
+Hi Alice.
+`;
+    const result = parseTxt(txt);
+    expect(result).toHaveLength(2);
+    expect(result[0].speaker).toBe("Alice");
+    expect(result[0].text).toBe("Hello there.");
+    expect(result[1].speaker).toBe("Bob");
+    expect(result[1].text).toBe("Hi Alice.");
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -522,6 +539,29 @@ Hello from TXT.
 
   test("returns empty array for unrecognized format", () => {
     expect(parseTranscript("This is just random text with no format.")).toEqual([]);
+  });
+
+  test("parses VTT that starts directly with a timestamp (no WEBVTT header)", () => {
+    // TIMESTAMP_RE anchors to start-of-string (no /m flag), so this triggers the
+    // fast VTT path (lines 188-189, true branch).
+    const raw = `00:00:01.000 --> 00:00:05.000
+Alice: Hello directly
+`;
+    const result = parseTranscript(raw);
+    expect(result).toHaveLength(1);
+    expect(result[0].speaker).toBe("Alice");
+    expect(result[0].text).toBe("Hello directly");
+    expect(result[0].start).toBe(1);
+    expect(result[0].end).toBe(5);
+  });
+
+  test("falls through when timestamp-starting input has no cue content", () => {
+    // TIMESTAMP_RE matches (starts with timestamp), but parseVtt returns [] because
+    // there is no content line after the timestamp. Covers the false branch of
+    // `if (vtt.length)` on line 189 and the full fallthrough to return [].
+    const raw = "00:00:01.000 --> 00:00:05.000\n";
+    const result = parseTranscript(raw);
+    expect(result).toEqual([]);
   });
 
   test("VTT result has start/end in seconds (not strings)", () => {
@@ -697,6 +737,15 @@ describe("computeMetrics", () => {
     ];
     const { speakerStats } = computeMetrics(utterances);
     expect(speakerStats[0].wordShare).toBe(0);
+  });
+
+  test("timeShare is 0 when meeting duration is 0 (all utterances at same instant)", () => {
+    const utterances = [
+      { speaker: "Alice", start: 5, end: 5, text: "instant" }
+    ];
+    const { speakerStats, meetingDuration } = computeMetrics(utterances);
+    expect(meetingDuration).toBe(0);
+    expect(speakerStats[0].timeShare).toBe(0);
   });
 });
 
