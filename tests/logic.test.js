@@ -1099,3 +1099,181 @@ Let us get started with the agenda.
     expect(freq.get("morning")).toBe(2);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Integration: full pipeline – parse → merge → metrics → speakerText →
+//              wordFrequencies → buildPrompt
+// ---------------------------------------------------------------------------
+describe("Integration: full pipeline VTT → prompt", () => {
+  const VTT = `WEBVTT
+
+00:00:00.000 --> 00:00:06.000
+Alice: We should prioritise the project deliverables.
+
+00:00:06.000 --> 00:00:12.000
+Bob: Agreed. The deadline is next Friday.
+
+00:00:12.000 --> 00:00:20.000
+Alice: Let us confirm the action items before closing.
+`;
+
+  test("produces utterances, merged utterances, and metrics", () => {
+    const utterances = parseTranscript(VTT);
+    expect(utterances).toHaveLength(3);
+
+    const merged = mergeUtterances(utterances);
+    // Alice speaks twice (non-adjacent), Bob once – no merging expected
+    expect(merged).toHaveLength(3);
+
+    const { speakerStats, meetingDuration, totalWords } = computeMetrics(merged);
+    expect(speakerStats).toHaveLength(2);
+    expect(meetingDuration).toBe(20);
+    expect(totalWords).toBeGreaterThan(0);
+  });
+
+  test("speakerText map contains text for each speaker", () => {
+    const utterances = parseTranscript(VTT);
+    const merged = mergeUtterances(utterances);
+    const speakerText = buildSpeakerText(merged);
+    expect(speakerText.has("Alice")).toBe(true);
+    expect(speakerText.has("Bob")).toBe(true);
+    expect(speakerText.get("Bob")).toContain("deadline");
+  });
+
+  test("wordFrequencies over all speakers picks up key terms", () => {
+    const utterances = parseTranscript(VTT);
+    const merged = mergeUtterances(utterances);
+    let allText = "";
+    for (const u of merged) allText += " " + u.text;
+    const freq = wordFrequencies(allText);
+    // "project" and "deadline" should survive stopword filtering
+    expect(freq.has("project")).toBe(true);
+    expect(freq.has("deadline")).toBe(true);
+  });
+
+  test("buildPrompt summary includes all speaker lines", () => {
+    const utterances = parseTranscript(VTT);
+    const merged = mergeUtterances(utterances);
+    const prompt = buildPrompt("summary", merged);
+    expect(prompt).toContain("Alice:");
+    expect(prompt).toContain("Bob:");
+    expect(prompt).toContain("project deliverables");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// computeMetrics – empty input edge case
+// ---------------------------------------------------------------------------
+describe("computeMetrics – empty input", () => {
+  test("empty utterances array returns empty speakerStats and zero totalWords", () => {
+    const { speakerStats, totalWords } = computeMetrics([]);
+    expect(speakerStats).toEqual([]);
+    expect(totalWords).toBe(0);
+  });
+
+  test("returns -Infinity for meetingDuration with empty input", () => {
+    // With no utterances meetingStart stays Infinity and meetingEnd stays 0,
+    // so meetingDuration = 0 - Infinity = -Infinity. This documents the known
+    // behaviour so callers know to guard against empty input before using the result.
+    const { meetingDuration } = computeMetrics([]);
+    expect(isFinite(meetingDuration)).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// parseContentLine – leading-colon edge case
+// ---------------------------------------------------------------------------
+describe("parseContentLine – leading colon", () => {
+  test("colon at position 0 produces empty-string speaker", () => {
+    const result = parseContentLine(":some text");
+    expect(result.speaker).toBe("");
+    expect(result.text).toBe("some text");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// buildSpeakerText – concatenation detail
+// ---------------------------------------------------------------------------
+describe("buildSpeakerText – concatenation detail", () => {
+  test("each utterance text is separated by a space when concatenated", () => {
+    const u = [
+      { speaker: "Alice", text: "first" },
+      { speaker: "Alice", text: "second" }
+    ];
+    const map = buildSpeakerText(u);
+    // Implementation prepends a space: "" + " " + "first" + " " + "second"
+    const text = map.get("Alice");
+    expect(text).toMatch(/first/);
+    expect(text).toMatch(/second/);
+    // Both words are separated (not run together)
+    expect(text).not.toMatch(/firstsecond/);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// pairsToTermsText – limit 0
+// ---------------------------------------------------------------------------
+describe("pairsToTermsText – limit 0", () => {
+  test("limit 0 returns empty string", () => {
+    const pairs = [["word", 5], ["other", 3]];
+    expect(pairsToTermsText(pairs, 0)).toBe("");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// PROMPT_TEMPLATES – structural validation
+// ---------------------------------------------------------------------------
+describe("PROMPT_TEMPLATES – structure", () => {
+  const EXPECTED_KEYS = ["summary", "actions", "perspectives", "nextmeeting", "tips"];
+
+  test("contains exactly the expected template keys", () => {
+    expect(Object.keys(PROMPT_TEMPLATES).sort()).toEqual(EXPECTED_KEYS.slice().sort());
+  });
+
+  test.each(EXPECTED_KEYS)("'%s' template has a non-empty label", (key) => {
+    expect(typeof PROMPT_TEMPLATES[key].label).toBe("string");
+    expect(PROMPT_TEMPLATES[key].label.length).toBeGreaterThan(0);
+  });
+
+  test.each(EXPECTED_KEYS)("'%s' template has a non-empty text", (key) => {
+    expect(typeof PROMPT_TEMPLATES[key].text).toBe("string");
+    expect(PROMPT_TEMPLATES[key].text.length).toBeGreaterThan(0);
+  });
+
+  test.each(EXPECTED_KEYS)("'%s' template text contains the transcript placeholder marker", (key) => {
+    // All templates close with "# Transcript\n" so callers can append the transcript
+    expect(PROMPT_TEMPLATES[key].text).toContain("# Transcript");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// module.exports guard – browser-environment branch (line 387 false branch)
+// ---------------------------------------------------------------------------
+describe("module.exports guard", () => {
+  test("logic.js runs without error in a context where module is undefined", () => {
+    const vm = require("vm");
+    const fs = require("fs");
+    const path = require("path");
+
+    const code = fs.readFileSync(path.join(__dirname, "../logic.js"), "utf-8");
+
+    // Provide the minimal globals the script uses, but deliberately omit
+    // `module` and `exports` to simulate a browser-like environment.
+    const context = vm.createContext({
+      console: { log: () => {} },
+      Set,
+      Map,
+      RegExp,
+      Math,
+      Number,
+      Array,
+      Infinity
+    });
+
+    // The script must not throw even though `module` is absent.
+    expect(() => vm.runInContext(code, context)).not.toThrow();
+
+    // In this context the guard prevents any export, so `module` stays absent.
+    expect(context.module).toBeUndefined();
+  });
+});
